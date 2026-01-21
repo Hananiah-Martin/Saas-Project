@@ -34,7 +34,9 @@ class ApplicationController < ActionController::Base
       # @current_member = current_user.member_for_tenant(tenant)
     else
       # Handle cases where a user somehow exists without a tenant
-      redirect_to root_path, alert: "Please join an organization to continue." unless devise_controller?
+      if !devise_controller? && request.path != root_path
+        redirect_to root_path, alert: "Please join an organization to continue."
+      end
     end
   end
 

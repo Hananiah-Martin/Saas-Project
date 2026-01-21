@@ -1,37 +1,36 @@
-<%= form_with(model: project) do |form| %>
-  <% if project.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+<%# Using model: @project allows Rails to automatically determine if this is a POST or PATCH %>
+<%= form_with(model: @project, local: true, class: "project") do |f| %>
 
-      <ul>
-        <% project.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+  <% if @project.errors.any? %>
+    <div class="alert alert-danger shadow-sm mb-4" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@project.errors.count, "error") %> stopped this project:</h4>
+      <ul class="mb-0">
+        <% @project.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="mb-3">
+    <%= f.label :title, class: 'form-label' %>
+    <%= f.text_field :title, class: 'form-control', placeholder: "Enter project title" %>
   </div>
 
-  <div>
-    <%= form.label :details, style: "display: block" %>
-    <%= form.text_field :details %>
+  <div class="mb-3">
+    <%= f.label :details, class: 'form-label' %>
+    <%= f.text_area :details, rows: 3, class: 'form-control', placeholder: "Describe the project..." %>
   </div>
 
-  <div>
-    <%= form.label :expected_completion_date, style: "display: block" %>
-    <%= form.date_field :expected_completion_date %>
+  <div class="mb-3">
+    <%= f.label :expected_completion_date, class: 'form-label' %>
+    <%# Rails 8 uses native date_field for better mobile support %>
+    <%= f.date_field :expected_completion_date, class: 'form-control' %>
   </div>
 
-  <div>
-    <%= form.label :tenant_id, style: "display: block" %>
-    <%= form.text_field :tenant_id %>
+  <div class="mt-4 border-top pt-3">
+    <%= f.submit nil, class: 'btn btn-primary px-4' %>
+    <%= link_to "Cancel", root_path, class: 'btn btn-link text-secondary' %>
   </div>
 
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>

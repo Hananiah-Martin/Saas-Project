@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: %i[ show edit update destroy ]
-
+  before_action :set_tenant, only: %i[ index new create edit update destroy ]
   # GET /projects or /projects.json
   def index
     @projects = Project.all
@@ -25,11 +25,10 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: "Project was successfully created." }
-        format.json { render :show, status: :created, location: @project }
+        format.html { redirect_to root_path, notice: "Project was successfully created." }
+
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -38,11 +37,9 @@ class ProjectsController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to @project, notice: "Project was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @project }
+        format.html { redirect_to root_path, notice: "Project was successfully updated.", status: :see_other }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,8 +49,7 @@ class ProjectsController < ApplicationController
     @project.destroy!
 
     respond_to do |format|
-      format.html { redirect_to projects_path, notice: "Project was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+      format.html { redirect_to root_path, notice: "Project was successfully destroyed.", status: :see_other }
     end
   end
 
@@ -66,5 +62,11 @@ class ProjectsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def project_params
       params.expect(project: [ :title, :details, :expected_completion_date, :tenant_id ])
+    end
+
+    def verify_tenant
+      unless params[:tenant_id].to_i == current_tenant.id
+        redirect_to root_path, alert: "Unauthorized access to project."
+      end
     end
 end

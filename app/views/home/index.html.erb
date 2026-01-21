@@ -3,25 +3,67 @@
     <div class="row justify-content-center">
       <div class="col-lg-10">
         <div class="card border-0 shadow-sm mb-4">
-          <div class="card-body p-5">
+          <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-              
               <div>
-                <p class="text-muted mb-2 text-uppercase small fw-medium letter-spacing-1">Dashboard</p>
-                <h2 class="display-6 fw-bold mb-3 text-dark">Organizations</h2>
-                
-                <div class="d-flex align-items-center bg-light rounded-3 px-3 py-2 d-inline-flex">
-                  <i class="bi bi-building text-primary me-2 fs-5"></i>
-                  <span class="fs-5 fw-semibold text-dark">
-                    <%= current_user.tenant&.name || 'No Organization' %>
+                <p class="text-muted mb-1 text-uppercase small fw-medium">Workspace</p>
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-building text-primary me-2 fs-4"></i>
+                  <h2 class="h4 fw-bold mb-0 text-dark">
+                    <%= current_tenant.name %>
+                  </h2>
+                  <span class="badge bg-light text-primary border ms-3">
+                    <%= current_tenant.plan.capitalize %> Plan
                   </span>
                 </div>
               </div>
 
               <div>
-                <!-- Add any action buttons here if needed -->
+                <%# Logic: Show button if plan is premium OR if free plan has 0 projects %>
+                <% if current_tenant.plan == 'premium' || current_tenant.projects.count < 1 %>
+                  <%= link_to new_project_path, class: "btn btn-primary d-flex align-items-center gap-2" do %>
+                    <i class="bi bi-plus-lg"></i>
+                    <span>New Project</span>
+                  <% end %>
+                <% else %>
+                  <%# Optional: Show a disabled button or Upgrade link when limit is reached %>
+                  <%= link_to "#pricing", class: "btn btn-outline-secondary d-flex align-items-center gap-2 disabled" do %>
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Limit Reached (Upgrade)</span>
+                  <% end %>
+                <% end %>
               </div>
+            </div>
+          </div>
+        </div>
 
+        <div class="row">
+          <div class="col-12">
+            <h4 class="fw-bold mb-4 d-flex align-items-center">
+              <i class="bi bi-collection-fill me-2 text-secondary"></i>
+              Active Projects
+            </h4>
+
+            <div id="projects_list">
+              <% if @projects.any? %>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                  <% @projects.each do |project| %>
+                    <div class="col">
+                      <%# This renders your _project.html.erb partial %>
+                      <%= render project %>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="card border-dashed bg-light text-center py-5">
+                  <div class="card-body">
+                    <i class="bi bi-folder2-open display-4 text-muted mb-3"></i>
+                    <h5>No projects found</h5>
+                    <p class="text-muted">Get started by creating your first project for <%= current_tenant.name %>.</p>
+                    <%= link_to "Create Project", new_project_path, class: "btn btn-outline-primary mt-2" %>
+                  </div>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
