@@ -87,4 +87,15 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  onfig.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.sendgrid.net',
+    port:                 587,
+    domain:               'https://saas-project-nwuv.onrender.com/', # Change this to your Render URL later
+    user_name:            'apikey', 
+    password:             Rails.application.credentials.dig(:sendgrid, :api_key),
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
 end

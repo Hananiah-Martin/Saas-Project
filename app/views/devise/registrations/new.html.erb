@@ -1,0 +1,61 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h2 class="text-center mb-4 fw-bold"><%= t('.sign_up') %></h2>
+
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+
+          <div class="mb-3">
+            <%= f.label :email, class: "form-label fw-semibold" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control shadow-sm', placeholder: "name@company.com" %>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <%= f.label :password, class: "form-label fw-semibold" %>
+              <%= f.password_field :password, autocomplete: "new-password", class: 'form-control shadow-sm' %>
+              <% if @minimum_password_length %>
+                <div class="form-text small text-muted"><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></div>
+              <% end %>
+            </div>
+
+            <div class="col-md-6">
+              <%= f.label :password_confirmation, class: "form-label fw-semibold" %>
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control shadow-sm' %>
+            </div>
+          </div>
+
+          <hr class="my-4 text-muted">
+          <h5 class="mb-3 text-secondary">Organization Details</h5>
+
+          <%# FIX: Use f.fields_for to ensure params are sent as tenant_attributes %>
+          <%= f.fields_for :tenant, resource.tenant || resource.build_tenant do |w| %>
+            <div class="row g-3 mb-4">
+              <div class="col-md-8">
+                <%= w.label :name, 'Organization Name', class: "form-label fw-semibold" %>
+                <%= w.text_field :name, required: true, class: "form-control shadow-sm", placeholder: "e.g. Acme Corp" %>
+                <div class="form-text small">Unique name for your group account.</div>
+              </div>
+              
+              <div class="col-md-4">
+                <%= w.label :plan, class: "form-label fw-semibold" %>
+                <%= w.select :plan, options_for_select([['Free', 'free'], ['Premium', 'premium']], params[:plan]), {}, 
+                    required: true, class: "form-select shadow-sm" %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="d-grid gap-2 mt-4">
+            <%= f.submit t('.sign_up'), class: 'btn btn-primary btn-lg' %>
+          </div>
+        <% end %>
+
+        <div class="mt-4 text-center">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
