@@ -1,0 +1,95 @@
+<div class="container py-5 text-center">
+  <div class="card shadow-lg p-5 border-0 rounded-4 mx-auto mt-5" style="max-width: 500px;">
+    <div class="premium-badge mb-3">
+      <i class="bi bi-stars fs-1 text-warning"></i>
+    </div>
+    <h2 class="fw-bold text-dark mb-2">Upgrade to Premium</h2>
+    <p class="text-muted mb-4">Unlock unlimited artifact uploads and get priority support for your projects.</p>
+    
+    <div class="price-container mb-4">
+      <span class="currency fs-3 fw-bold align-top">₹</span>
+      <span class="display-3 fw-bold">500</span>
+      <span class="text-muted">/one-time</span>
+    </div>
+
+    <button id="rzp-button1" class="btn btn-primary btn-lg w-100 py-3 rounded-3 shadow fw-bold">
+      Pay with Razorpay
+    </button>
+    
+    <div class="mt-4 d-flex justify-content-center gap-3">
+      <i class="bi bi-shield-check text-success"></i> <small class="text-muted">Secure Payment</small>
+      <i class="bi bi-credit-card text-muted"></i> <small class="text-muted">Cards/UPI/Netbanking</small>
+    </div>
+  </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js" data-turbo-track="reload"></script>
+
+<script data-turbo-eval="true">
+  // We use a function to initialize so we can call it whenever Turbo loads the page
+  const initializeRazorpay = () => {
+    const btn = document.getElementById('rzp-button1');
+    if (!btn) return;
+
+    const options = {
+      "key": "<%= Rails.application.credentials.dig(:razorpay, :key_id) %>",
+      "amount": "<%= @order.amount %>",
+      "currency": "INR",
+      "name": "SaaS Project",
+      "description": "Premium Plan Subscription",
+      "order_id": "<%= @order.id %>",
+      "handler": function (response) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/payments/verify';
+        
+        // Add CSRF Token (Required for Rails POST)
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'authenticity_token';
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+
+        const fields = ['razorpay_payment_id', 'razorpay_order_id', 'razorpay_signature'];
+        fields.forEach(field => {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = field;
+          hiddenField.value = response[field];
+          form.appendChild(hiddenField);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      },
+      "prefill": {
+        "name": "<%= current_user.email %>",
+        "email": "<%= current_user.email %>"
+      },
+      "theme": { "color": "#0d6efd" }
+    };
+
+    const rzp1 = new Razorpay(options);
+    btn.onclick = function(e) {
+      rzp1.open();
+      e.preventDefault();
+    }
+  };
+
+  // Listen for Turbo load events to ensure the script runs after navigation
+  document.addEventListener("turbo:load", initializeRazorpay);
+  // Also run immediately in case of initial page load
+  initializeRazorpay();
+</script>
+
+<style>
+  .price-container { color: #2d3436; }
+  .premium-badge { 
+    background: #fff9db; 
+    width: 80px; height: 80px; 
+    line-height: 80px; 
+    border-radius: 50%; 
+    margin: 0 auto;
+  }
+</style>

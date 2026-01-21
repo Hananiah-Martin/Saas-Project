@@ -3,6 +3,7 @@ class Project < ApplicationRecord
   validates :title, presence: true, length: { minimum: 3 }
   validates :title, uniqueness: { scope: :tenant_id, message: "already exists in this organization" }
   validate :free_plan_can_only_have_one_project, on: :create
+  has_many :artifacts, dependent: :destroy
   scope :visible_by_plan, -> {
     if ActsAsTenant.current_tenant&.plan == 'free'
       order(created_at: :asc).limit(1)

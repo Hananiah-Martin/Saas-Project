@@ -1,0 +1,54 @@
+<div id="<%= dom_id artifact %>" class="card border-0 shadow-sm overflow-hidden">
+  <div class="bg-light d-flex align-items-center justify-content-center border-bottom" style="min-height: 350px; background-image: radial-gradient(#dee2e6 1px, transparent 1px); background-size: 20px 20px;">
+    <% if artifact.upload.attached? %>
+      <% if artifact.upload.image? %>
+        <%= cl_image_tag artifact.upload.key, 
+            width: 800, 
+            crop: :limit, 
+            class: "img-fluid shadow-lg rounded my-4 mx-2", 
+            style: "max-height: 500px; object-fit: contain;",
+            alt: artifact.name %>
+      <% else %>
+        <div class="text-center p-5">
+          <i class="bi bi-file-earmark-pdf text-danger display-1"></i>
+          <h4 class="mt-3 text-secondary"><%= artifact.upload.filename %></h4>
+          <%= link_to rails_blob_path(artifact.upload, disposition: "attachment"), class: "btn btn-outline-primary mt-2" do %>
+            <i class="bi bi-download me-1"></i> Download File
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center p-5 text-muted">
+        <i class="bi bi-exclamation-triangle display-1"></i>
+        <p>No file attached to this record.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card-body p-4">
+    <div class="row">
+      <div class="col-md-7">
+        <label class="text-uppercase text-muted fw-bold small mb-1">Artifact Name</label>
+        <h2 class="h4 fw-bold text-dark mb-3"><%= artifact.name %></h2>
+        
+        <div class="d-flex align-items-center gap-3">
+          <div class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+            <i class="bi bi-folder2-open me-1"></i> Project ID: #<%= artifact.project_id %>
+          </div>
+          <div class="text-muted small">
+             <i class="bi bi-calendar3 me-1"></i> Uploaded: <%= artifact.created_at.strftime("%b %d, %Y") %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5 text-md-end mt-3 mt-md-0">
+        <% if artifact.upload.attached? %>
+          <label class="text-uppercase text-muted fw-bold small mb-1">Cloudinary Assets</label>
+          <div class="text-monospace small text-secondary bg-light p-2 rounded border border-dashed">
+            <i class="bi bi-cloud-check me-1"></i> <%= artifact.upload.key %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

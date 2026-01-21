@@ -27,9 +27,9 @@
                   <% end %>
                 <% else %>
                   <%# Optional: Show a disabled button or Upgrade link when limit is reached %>
-                  <%= link_to "#pricing", class: "btn btn-outline-secondary d-flex align-items-center gap-2 disabled" do %>
-                    <i class="bi bi-lock-fill"></i>
-                    <span>Limit Reached (Upgrade)</span>
+                  <%= link_to checkout_path, class: "btn btn-outline-warning d-flex align-items-center gap-2" do %>
+                    <i class="bi bi-rocket-takeoff-fill"></i>
+                    <span>Limit Reached (Upgrade to Premium)</span>
                   <% end %>
                 <% end %>
               </div>

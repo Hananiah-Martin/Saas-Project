@@ -1,35 +1,256 @@
-<div id="<%= dom_id project %>" class="card shadow-sm mb-3">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-start">
-      <div>
-        <h5 class="card-title text-primary mb-1">
-          <%= link_to project.title, project, class: "text-decoration-none" %>
+<div id="<%= dom_id project %>" class="project-card card border-0 shadow-hover mb-4 overflow-hidden">
+  <!-- Top gradient accent -->
+  <div class="card-gradient-top"></div>
+  
+  <div class="card-body p-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div class="flex-grow-1 me-3">
+        <h5 class="card-title mb-2">
+          <%= link_to project.title, project, class: "text-decoration-none fw-bold fs-4 text-gradient-primary" %>
         </h5>
-        <p class="text-muted small mb-2">
-          <i class="bi bi-building"></i> <%= current_tenant.name %>
-        </p>
+        <div class="d-inline-flex align-items-center tenant-badge px-3 py-2 rounded-pill">
+          <i class="bi bi-building me-2"></i>
+          <span class="fw-semibold small"><%= current_tenant.name %></span>
+        </div>
       </div>
       
-      <%# Status Badge - Logic can be added later %>
-      <span class="badge rounded-pill bg-info text-dark">Active</span>
+      <span class="badge status-badge rounded-pill px-3 py-2 shadow-sm">
+        <i class="bi bi-circle-fill pulse-dot me-1"></i>
+        Active
+      </span>
     </div>
 
-    <div class="card-text mb-3 text-secondary">
-      <strong>Details:</strong>
-      <%= truncate(project.details, length: 150) || "No details provided." %>
+    <!-- Details Section -->
+    <div class="details-box p-3 rounded-3 mb-3 position-relative">
+      <div class="details-icon position-absolute">
+        <i class="bi bi-file-text-fill"></i>
+      </div>
+      <div class="details-label text-uppercase small fw-bold mb-2">
+        <i class="bi bi-info-circle-fill me-1"></i>
+        Project Details
+      </div>
+      <p class="details-text mb-0 lh-base">
+        <%= truncate(project.details, length: 150) || "No details provided." %>
+      </p>
     </div>
 
-    <div class="d-flex align-items-center justify-content-between border-top pt-2">
-      <div class="small text-muted">
-        <i class="bi bi-calendar-check"></i>
-        <strong>Due:</strong> 
-        <%= project.expected_completion_date&.to_formatted_s(:long) || "TBD" %>
+    <!-- Footer Section -->
+    <div class="card-footer-custom d-flex align-items-center justify-content-between pt-3 border-top">
+      <div class="due-date-badge d-flex align-items-center gap-2 px-3 py-2 rounded-3">
+        <div class="calendar-icon">
+          <i class="bi bi-calendar-check-fill fs-5"></i>
+        </div>
+        <div>
+          <div class="small text-uppercase fw-bold opacity-75" style="font-size: 0.7rem; letter-spacing: 0.5px;">Due Date</div>
+          <div class="fw-semibold">
+            <%= project.expected_completion_date&.strftime("%b %d, %Y") || "TBD" %>
+          </div>
+        </div>
       </div>
       
-      <div class="btn-group">
-        <%= link_to "View", project, class: "btn btn-sm btn-outline-secondary" %>
-        <%= link_to "Edit", edit_project_path(project), class: "btn btn-sm btn-outline-primary" %>
+      <div class="btn-group shadow-sm" role="group">
+        <%= link_to project, class: "btn btn-outline-primary btn-hover-lift" do %>
+          <i class="bi bi-eye me-1"></i>
+          View
+        <% end %>
+        <%= link_to edit_project_path(project), class: "btn btn-primary btn-hover-lift" do %>
+          <i class="bi bi-pencil me-1"></i>
+          Edit
+        <% end %>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  /* Project Card Styles */
+  .project-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  }
+
+  .card-gradient-top {
+    height: 5px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .shadow-hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .project-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(102, 126, 234, 0.15), 
+                0 10px 10px -5px rgba(102, 126, 234, 0.1);
+  }
+
+  /* Title Gradient */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .text-gradient-primary:hover {
+    transform: translateX(4px);
+    background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Tenant Badge */
+  .tenant-badge {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .tenant-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+  }
+
+  /* Status Badge */
+  .status-badge {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .status-badge:hover {
+    transform: scale(1.1) rotate(-2deg);
+  }
+
+  .pulse-dot {
+    font-size: 0.5rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* Details Box */
+  .details-box {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border-left: 4px solid #667eea;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .details-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .details-icon {
+    top: 1rem;
+    right: 1rem;
+    font-size: 2.5rem;
+    color: rgba(102, 126, 234, 0.1);
+    z-index: 0;
+  }
+
+  .details-label {
+    color: #667eea;
+    letter-spacing: 0.5px;
+  }
+
+  .details-text {
+    color: #4a5568;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Due Date Badge */
+  .due-date-badge {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    box-shadow: 0 2px 8px rgba(252, 182, 159, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .due-date-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(252, 182, 159, 0.4);
+  }
+
+  .calendar-icon {
+    color: #f5576c;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Button Styles */
+  .btn-hover-lift {
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+
+  .btn-hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .project-card {
+      border-radius: 12px;
+    }
+    
+    .card-footer-custom {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch !important;
+    }
+    
+    .btn-group {
+      width: 100%;
+    }
+    
+    .btn-group .btn {
+      flex: 1;
+    }
+  }
+</style>
