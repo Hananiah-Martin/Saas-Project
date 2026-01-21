@@ -1,0 +1,5 @@
+<p>Hello!</p>
+<p>You have been invited to join <strong><%= @resource.tenant.name %></strong>.</p>
+
+<p><%= link_to 'Accept Invitation & Set Password', accept_invitation_url(@resource, :invitation_token => @token), 
+    style: "padding: 10px; background: blue; color: white; border-radius: 5px; text-decoration: none;" %></p>

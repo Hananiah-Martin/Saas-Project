@@ -1,0 +1,21 @@
+<%= form_for(@member) do |f| %>
+  <%= fields_for(:user) do |u| %>
+    <div class="mb-3">
+      <%= u.label :email, "Friend's Email", class: "form-label" %>
+      <%= u.email_field :email, class: "form-control", placeholder: "friend@example.com" %>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= f.label :first_name, class: "form-label" %>
+      <%= f.text_field :first_name, class: "form-control" %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= f.label :last_name, class: "form-label" %>
+      <%= f.text_field :last_name, class: "form-control" %>
+    </div>
+  </div>
+
+  <%= f.submit "Send Invitation", class: "btn btn-primary" %>
+<% end %>

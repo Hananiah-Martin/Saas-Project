@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#"><%= current_tenant&.name || "SaaS App" %></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,33 +9,35 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
+        
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "Invite Members", new_member_path, class: "nav-link text-primary fw-bold" %>
+          </li>
+        <% end %>
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            Settings
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Organization Profile</a></li>
+            <li><a class="dropdown-item" href="#">Billing</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="#">Help</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <% if user_signed_in? %>
-            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true"><%= current_user.email %></a>
-          <% else %>
-            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Guest</a>
-          <% end %>
-        </li>
       </ul>
+
       <div class="d-flex align-items-center gap-2">
         <% if user_signed_in? %>
-          <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-success" %>
+          <span class="navbar-text me-2">
+            <strong><%= current_user.email %></strong>
+          </span>
+          <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
         <% else %>
           <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-success" %>
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-success" %>
         <% end %>
       </div>
     </div>

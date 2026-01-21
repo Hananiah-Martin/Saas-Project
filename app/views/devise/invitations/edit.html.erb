@@ -1,0 +1,29 @@
+<h2>Set Your Password</h2>
+<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
+  <%= f.hidden_field :invitation_token %>
+  
+  <!-- Display validation errors -->
+  <% if resource.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(resource.errors.count, "error") %> prevented this from being saved:</h4>
+      <ul>
+        <% resource.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="mb-3">
+    <%= f.label :password, class: "form-label" %>
+    <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
+    <small class="form-text text-muted">Minimum 6 characters</small>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password_confirmation, class: "form-label" %>
+    <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+  </div>
+
+  <%= f.submit "Join Organization", class: "btn btn-success" %>
+<% end %>

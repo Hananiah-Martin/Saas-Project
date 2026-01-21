@@ -1,7 +1,7 @@
 class Member < ActiveRecord::Base
   belongs_to :tenant
   acts_as_tenant :tenant
-
+  belongs_to :user
   DEFAULT_ADMIN={
     first_name: 'Admin',
     last_name: 'Please edit me',
