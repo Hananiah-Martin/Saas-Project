@@ -1,10 +1,11 @@
-<%# Change this line: %>
-<%= form_with(model: [@project, artifact]) do |form| %>
+<%= form_with(model: [@project, artifact], local: true, class: "needs-validation") do |form| %>
 
   <% if artifact.errors.any? %>
-    <div class="alert alert-danger">
-      <h2><%= pluralize(artifact.errors.count, "error") %> prohibited this artifact from being saved:</h2>
-      <ul>
+    <div class="alert alert-danger border-0 shadow-sm mb-4">
+      <h6 class="alert-heading fw-bold">
+        <%= pluralize(artifact.errors.count, "error") %> prohibited this artifact from being saved:
+      </h6>
+      <ul class="mb-0 small">
         <% artifact.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -12,17 +13,24 @@
     </div>
   <% end %>
 
-  <div class="mb-3">
-    <%= form.label :name, class: "form-label" %>
-    <%= form.text_field :name, class: "form-control" %>
+  <div class="mb-4">
+    <%= form.label :name, class: "form-label fw-semibold" %>
+    <%= form.text_field :name, 
+        class: "form-control form-control-lg", 
+        placeholder: "Enter artifact name..." %>
+    <div class="form-text text-muted">Give your upload a descriptive title.</div>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :upload, "File Upload", class: "form-label" %>
-    <%= form.file_field :upload, class: "form-control" %>
+  <div class="mb-4">
+    <%= form.label :upload, "Choose File", class: "form-label fw-semibold" %>
+    <%= form.file_field :upload, class: "form-control shadow-sm" %>
+    <div class="form-text mt-2">
+      <i class="bi bi-cloud-arrow-up"></i> Your file will be securely stored on Cloudinary.
+    </div>
   </div>
 
-  <div>
-    <%= form.submit "Upload to Cloudinary", class: "btn btn-primary" %>
+  <div class="d-grid gap-2">
+    <%= form.submit "Upload to Cloudinary", class: "btn btn-primary btn-lg shadow-sm mt-3" %>
   </div>
+
 <% end %>

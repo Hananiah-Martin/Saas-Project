@@ -2,7 +2,14 @@ class ArtifactsController < ApplicationController
   # set_artifact will now look for the artifact WITHIN the current tenant scope automatically
   before_action :set_artifact, only: %i[show edit update destroy]
   before_action :set_project, only: %i[new create]
+  before_action :check_premium_limit, only: [:new, :create]
 
+  def check_premium_limit
+    @project = Project.find(params[:project_id])
+    if current_tenant.plan != 'premium' && @project.artifacts.count >= 2
+      redirect_to checkout_path, alert: "Free plan limit reached (2 artifacts). Please upgrade to continue!"
+    end
+  end
   # GET /artifacts
   def index
     # acts_as_tenant ensures @artifacts only contains records for the current organization

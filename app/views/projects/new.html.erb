@@ -1,11 +1,26 @@
-<% content_for :title, "New project" %>
+<% content_for :title, "Create New Project" %>
 
-<h1>New project</h1>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      
+      <nav aria-label="breadcrumb" class="mb-4">
+        <%= link_to projects_path, class: "text-decoration-none text-muted d-flex align-items-center" do %>
+          <i class="bi bi-arrow-left me-2"></i> Back to projects
+        <% end %>
+      </nav>
 
-<%= render "form", project: @project %>
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-white border-0 pt-5 px-5">
+          <h1 class="display-6 fw-bold text-dark mb-0">New Project</h1>
+          <p class="text-muted">Fill in the details below to kickstart your new venture.</p>
+        </div>
 
-<br>
+        <div class="card-body p-5 pt-4">
+          <%= render "form", project: @project %>
+        </div>
+      </div>
 
-<div>
-  <%= link_to "Back to projects", projects_path %>
+    </div>
+  </div>
 </div>
