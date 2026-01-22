@@ -85,20 +85,21 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
+  primary:
     <<: *default
-    database: saas_project_production
-    username: saas_project
-    password: <%= ENV["SAAS_PROJECT_DATABASE_PASSWORD"] %>
+    # This URL line is the most important part!
+    url: <%= ENV['DATABASE_URL'] %>
+    # Set the pool to match your Render/Heroku plan (usually 5-10)
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  
+  # Unless you specifically have 3 extra databases set up, 
+  # point these back to the primary database
   cache:
-    <<: *primary_production
-    database: saas_project_production_cache
-    migrations_paths: db/cache_migrate
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
   queue:
-    <<: *primary_production
-    database: saas_project_production_queue
-    migrations_paths: db/queue_migrate
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
   cable:
-    <<: *primary_production
-    database: saas_project_production_cable
-    migrations_paths: db/cable_migrate
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
