@@ -1,5 +1,4 @@
-<%# Specify the url and method to ensure it hits your invitation logic %>
-<%= form_for(@member, url: invite_member_tenant_path(current_tenant), method: :post) do |f| %>
+<%= form_for(@member, url: invite_member_tenant_path(@tenant), method: :post) do |f| %>
   <%= fields_for(:user) do |u| %>
     <div class="mb-3">
       <%= u.label :email, "Friend's Email", class: "form-label fw-bold" %>

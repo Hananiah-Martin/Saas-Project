@@ -12,7 +12,7 @@
         
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to "Invite Members", new_member_path, class: "nav-link text-primary fw-bold" %>
+            <%= link_to "Invite Members", members_tenant_path(current_tenant), class: "nav-link text-primary fw-bold" %>
           </li>
         <% end %>
 

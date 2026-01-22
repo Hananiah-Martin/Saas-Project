@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   resources :members
   get 'checkout', to: 'payments#checkout'
   post 'payments/verify', to: 'payments#verify'
+  resources :tenants do
+  member do
+    get 'members'          # Page to view the team and the invite form
+    post 'invite_member'   # Action that triggers the SendGrid email
+  end
+end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

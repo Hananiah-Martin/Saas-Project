@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white p-3">
+          <h4 class="mb-0">Team Members for <%= @tenant.name %></h4>
+        </div>
+        <div class="card-body p-4">
+          
+          <h5 class="fw-bold">Invite New Member</h5>
+          <%= render 'form_invite' %> 
+
+          <hr class="my-4">
+
+          <h5 class="fw-bold">Existing Members</h5>
+          <ul class="list-group list-group-flush">
+            <% @tenant.users.each do |user| %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <%= user.email %>
+                <span class="badge bg-success rounded-pill">Active</span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
