@@ -58,7 +58,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: 'saas-project-nwuv.onrender.com', protocol: 'https'}
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -90,12 +90,12 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-    address:              'smtp.sendgrid.net',
-    port:                 587,
-    domain:               'https://saas-project-nwuv.onrender.com/', # Change this to your Render URL later
-    user_name:            'apikey', 
-    password:             Rails.application.credentials.dig(:sendgrid, :api_key),
-    authentication:       'plain',
-    enable_starttls_auto: true
-  }
+  address:              'smtp.gmail.com',
+  port:                 587,
+  domain:               'onrender.com',
+  user_name:            'apikey',
+  password:             Rails.application.credentials.dig(:sendgrid, :api_key), # Use an Environment Variable!
+  authentication:       'plain',
+  enable_starttls_auto: true
+}
 end

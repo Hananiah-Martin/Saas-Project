@@ -8,4 +8,9 @@ class User < ApplicationRecord
   has_many :tenants, through: :members
   # 2. Tell Rails to accept tenant data during User creation
   accepts_nested_attributes_for :tenant
+
+  
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
 end
