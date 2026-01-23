@@ -1,5 +1,5 @@
 # app/controllers/registrations_controller.rb
-class RegistrationsController < Devise::RegistrationsController
+class RegistrationsController < Devise::RegistrationController
   # raise: false prevents errors if these methods aren't in the inheritance chain yet
   skip_before_action :set_tenant, only: [:new, :create], raise: false
   skip_before_action :authenticate_user!, only: [:new, :create], raise: false
@@ -33,11 +33,11 @@ class RegistrationsController < Devise::RegistrationsController
           if resource.active_for_authentication?
             set_flash_message! :notice, :signed_up
             sign_up(resource_name, resource)
-            respond_with resource, location: after_sign_up_path_for(resource)
+            redirect_to after_sign_up_path_for(resource) and return
           else
             set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
             expire_data_after_sign_in!
-            respond_with resource, location: after_inactive_sign_up_path_for(resource)
+            redirect_to after_inactive_sign_up_path_for(resource) and return
           end
         else
           # Rollback if User fails
@@ -48,7 +48,8 @@ class RegistrationsController < Devise::RegistrationsController
         raise ActiveRecord::Rollback
       end
     end
-  rescue ActiveRecord::Rollback
+    
+    # This code runs if the transaction was rolled back
     clean_up_passwords resource
     set_minimum_password_length
     # Add tenant errors to the resource so they show up in the UI
