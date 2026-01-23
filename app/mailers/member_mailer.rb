@@ -6,4 +6,4 @@ class MemberMailer < ApplicationMailer
   
     mail(to: email, subject: "Invitation to join #{@tenant.name}")
   end
-endpro
+end
