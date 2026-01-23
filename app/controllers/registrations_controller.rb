@@ -1,5 +1,5 @@
 # app/controllers/registrations_controller.rb
-class RegistrationsController < Devise::RegistrationController
+class RegistrationsController < Devise::RegistrationsController
   # raise: false prevents errors if these methods aren't in the inheritance chain yet
   skip_before_action :set_tenant, only: [:new, :create], raise: false
   skip_before_action :authenticate_user!, only: [:new, :create], raise: false
